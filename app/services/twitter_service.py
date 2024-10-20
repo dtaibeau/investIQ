@@ -1,4 +1,3 @@
-import csv
 import os
 import tweepy
 from dotenv import load_dotenv
@@ -6,28 +5,43 @@ from dotenv import load_dotenv
 # Load environment variables from .env
 load_dotenv()
 
-# Twitter API credentials
 API_KEY = os.getenv("TWITTER_API_KEY")
 API_SECRET = os.getenv("TWITTER_API_SECRET")
 ACCESS_TOKEN = os.getenv("TWITTER_ACCESS_TOKEN")
-BEARER_TOKEN = os.getenv("TWITTER_BEARER_TOKEN")
 ACCESS_SECRET = os.getenv("TWITTER_ACCESS_SECRET")
+CLIENT_ID = os.getenv("TWITTER_CLIENT_ID")
+CLIENT_SECRET = os.getenv("TWITTER_CLIENT_SECRET")
 
 
-# Load environment variables from .env
-load_dotenv()
+def get_tweets(username):
+    # Authorization to consumer key and consumer secret
+    auth = tweepy.OAuthHandler(API_KEY, API_SECRET)
 
-def test_twitter_v2():
-    client = tweepy.Client(bearer_token=BEARER_TOKEN)
+    # Access to user's access key and access secret
+    auth.set_access_token(ACCESS_TOKEN, ACCESS_SECRET)
 
-    try:
-        response = client.search_recent_tweets(query="test", max_results=1)
-        if response.data:
-            print(f"Tweet: {response.data[0].text}")
-        else:
-            print("No tweets found.")
-    except Exception as e:
-        print(f"Error: {e}")
+    # Calling api
+    api = tweepy.API(auth)
+
+    # 200 tweets to be extracted
+    number_of_tweets = 200
+    tweets = api.user_timeline(screen_name=username)
+
+    # Empty Array
+    tmp = []
+
+    # create array of tweet information: username,
+    # tweet id, date/time, text
+    tweets_for_csv = [tweet.text for tweet in tweets]  # CSV file created
+    for j in tweets_for_csv:
+        # Appending tweets to the empty array tmp
+        tmp.append(j)
+
+        # Printing the tweets
+    print(tmp)
+
 
 if __name__ == '__main__':
-    test_twitter_v2()
+    # Here goes the twitter handle for the user
+    # whose tweets are to be extracted.
+    get_tweets("twitter-handle")
