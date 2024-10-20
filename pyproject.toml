@@ -7,6 +7,11 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.12"
+tweepy = "^4.14.0"
+python-dotenv = "^1.0.1"
+numpy = "^2.1.2"
+matplotlib = "^3.9.2"
+pytest = "^8.3.3"
 
 
 [build-system]
