@@ -19,6 +19,7 @@ pydantic = "^2.9.2"
 langchain = "^0.3.4"
 langchain-openai = "^0.2.3"
 streamlit = "^1.39.0"
+git-filter-repo = "^2.45.0"
 
 
 [build-system]

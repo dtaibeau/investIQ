@@ -11,14 +11,19 @@ def json_to_html(llm_output: SummaryOutput) -> str:
     body {
         font-family: Arial, sans-serif;
         color: white;
-        padding: 15px;
     }
-    .trend {
-        margin-bottom: 10px;
-        font-size: 1.2em;
+    .section_title {
         font-weight: bold;
+        font-size: 1.6em;
+        margin-bottom: 10px;
     }
-    .investment_opportunities {
+    .trend_description {
+        font-style: italic;
+        font-size: 1.2em;
+        margin-top: 5px;
+    }
+    .opportunities_list {
+        font-style: italic;
         margin-top: 5px;
         color: white;
     }
@@ -26,12 +31,13 @@ def json_to_html(llm_output: SummaryOutput) -> str:
     html += "</style></head><body>"
     html += "<div class='transcript'>"
 
-    # trend
-    html += f"<div class='trend'>Trend: {llm_output.trend}</div>"
+    # Add the "Trend" heading and separate line for the trend description
+    html += "<div class='section_title'>Trend</div>"
+    html += f"<div class='trend_description'>{llm_output.trend}</div>"
 
-    # investment opportunities
-    html += "<div class='investment_opportunities'>Investment Opportunities:</div>"
-    html += "<ul>"
+    # Add the "Investment Opportunities" heading and list
+    html += "<div class='section_title'>Investment Opportunities</div>"
+    html += "<ul class='opportunities_list'>"
     for opportunity in llm_output.investment_opportunities:
         html += f"<li>{opportunity}</li>"
     html += "</ul>"
@@ -40,6 +46,7 @@ def json_to_html(llm_output: SummaryOutput) -> str:
     html += "</div></body></html>"
 
     return html
+
 
 def main():
     st.title("InvestIQ: AI-powered Investment Insights")
