@@ -2,7 +2,6 @@ import os
 import tweepy
 from dotenv import load_dotenv
 
-# Load environment variables from .env
 load_dotenv()
 
 API_KEY = os.getenv("TWITTER_API_KEY")
@@ -11,37 +10,44 @@ ACCESS_TOKEN = os.getenv("TWITTER_ACCESS_TOKEN")
 ACCESS_SECRET = os.getenv("TWITTER_ACCESS_SECRET")
 CLIENT_ID = os.getenv("TWITTER_CLIENT_ID")
 CLIENT_SECRET = os.getenv("TWITTER_CLIENT_SECRET")
+BEARER_TOKEN = os.getenv("TWITTER_BEARER_TOKEN")
 
 
-def get_tweets(username):
-    # Authorization to consumer key and consumer secret
-    auth = tweepy.OAuthHandler(API_KEY, API_SECRET)
+def authenticate_twitter():
+    """Authenticate with Twitter API v1.1 using Tweepy."""
+    client = tweepy.Client(bearer_token=BEARER_TOKEN)
+    return client
 
-    # Access to user's access key and access secret
-    auth.set_access_token(ACCESS_TOKEN, ACCESS_SECRET)
 
-    # Calling api
-    api = tweepy.API(auth)
+def fetch_tweets_from_user(username, count=10):
+    """Fetch tweets from a specific user."""
+    client = authenticate_twitter()
+    tweets_data = []
 
-    # 200 tweets to be extracted
-    number_of_tweets = 200
-    tweets = api.user_timeline(screen_name=username)
+    try:
+        # fetch user ID from username
+        user = client.get_user(username=username)
+        user_id = user.data.id
 
-    # Empty Array
-    tmp = []
+        # fetch recent tweets from user
+        tweets = client.get_users_tweets(user_id, max_results=count)
 
-    # create array of tweet information: username,
-    # tweet id, date/time, text
-    tweets_for_csv = [tweet.text for tweet in tweets]  # CSV file created
-    for j in tweets_for_csv:
-        # Appending tweets to the empty array tmp
-        tmp.append(j)
+        if tweets.data:
+            for tweet in tweets.data:
+                tweet_info = {
+                    "created_at": tweet.created_at.isoformat() if tweet.created_at else None,
+                    "text": tweet.text,
+                }
+                tweets_data.append(tweet_info)
+        else:
+            print("No tweets found for the specified user.")
 
-        # Printing the tweets
-    print(tmp)
+    except Exception as e:
+        print(f"Error fetching tweets: {e}")
+
+    return tweets_data
 
 
 if __name__ == '__main__':
-    # Here goes the twitter handle for the user
-    # whose tweets are to be extracted.
-    get_tweets("twitter-handle")
+    tweets = fetch_tweets_from_user("KiteVC", count=10)
+    print(tweets)
