@@ -11,41 +11,52 @@ def json_to_html(llm_output: SummaryOutput) -> str:
     body {
         font-family: Arial, sans-serif;
         color: white;
+        margin: 20px;
     }
-    .section_title {
+    .title {
+        font-size: 1.4em;
         font-weight: bold;
-        font-size: 1.6em;
+        margin-bottom: 15px; /* Adjusted for more space */
+    }
+    .trend-text {
+        font-style: italic;
+        margin-left: 15px;
+        line-height: 1.6;
+        margin-bottom: 20px;
+    }
+    .investment-opportunities {
+        font-size: 1.2em;
+        font-weight: bold;
+        margin-top: 30px;
         margin-bottom: 10px;
     }
-    .trend_description {
-        font-style: italic;
-        font-size: 1.2em;
-        margin-top: 5px;
+    ul.opportunities-list {
+        list-style-type: disc;
+        margin-left: 30px;
+        line-height: 1.6;
     }
-    .opportunities_list {
-        font-style: italic;
-        margin-top: 5px;
-        color: white;
+    li {
+        margin-top: 8px;
     }
     """
     html += "</style></head><body>"
-    html += "<div class='transcript'>"
 
-    # Add the "Trend" heading and separate line for the trend description
-    html += "<div class='section_title'>Trend</div>"
-    html += f"<div class='trend_description'>{llm_output.trend}</div>"
+    # Add the trend title and text
+    html += "<div class='title'>Trend</div>"
+    html += f"<div class='trend-text'>{llm_output.trend}</div>"
 
-    # Add the "Investment Opportunities" heading and list
-    html += "<div class='section_title'>Investment Opportunities</div>"
-    html += "<ul class='opportunities_list'>"
+    # Add the investment opportunities title and list
+    html += "<div class='investment-opportunities'>Investment Opportunities</div>"
+    html += "<ul class='opportunities-list'>"
     for opportunity in llm_output.investment_opportunities:
         html += f"<li>{opportunity}</li>"
     html += "</ul>"
 
     # Close the HTML tags
-    html += "</div></body></html>"
+    html += "</body></html>"
 
     return html
+
 
 
 def main():
