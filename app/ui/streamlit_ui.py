@@ -61,7 +61,9 @@ def json_to_html(llm_output: SummaryOutput) -> str:
 
 def main():
     st.title("InvestIQ: AI-powered Investment Insights")
-    username = st.text_input("Twitter Username", value="KiteVC", help="Enter the Twitter handle without '@'")
+    username = st.text_input("Twitter Username",
+                             placeholder="Enter a Twitter username",
+                             help="Enter the Twitter handle without '@'")
     num_tweets = st.slider("Number of Tweets", 1, 50, 10)
 
     if st.button("Fetch and Analyze Tweets"):
